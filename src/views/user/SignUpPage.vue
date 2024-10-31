@@ -180,8 +180,9 @@ const checkId = async () => {
   }
   try {
     const { data } = await axiosinstance.get(`/member/checkDupl/${member.id}`)
-    disableSubmit.value = data.success
-    checkError.value = data.success ? '이미 사용중인 ID입니다.' : '사용가능한 ID입니다.'
+    const result = data.response.data
+    disableSubmit.value = !result.available // available이 false면 제출 불가능
+    checkError.value = result.message // 백엔드에서 전달한 메시지 표시
   } catch (error) {
     console.error('Error checking id:', error)
     checkError.value = '중복 체크에 실패했습니다. 다시 시도하세요.'
